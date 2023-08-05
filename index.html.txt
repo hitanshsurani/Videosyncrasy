@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SadTalker Flask App</title>
+</head>
+<body>
+    <h1>SadTalker Animation</h1>
+    <p>Choose the image name to animate:</p>
+    <select id="imageSelect">
+        {% for image in img_list %}
+        <option value="{{ image }}">{{ image }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="startAnimation()">Start Animation</button>
+    <div id="animationDiv"></div>
+    <script>
+        function startAnimation() {
+            var selectedImage = document.getElementById("imageSelect").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/animate?image=" + selectedImage, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var animationURL = xhr.responseText;
+                    var video = document.createElement("video");
+                    video.src = animationURL;
+                    video.controls = true;
+                    document.getElementById("animationDiv").appendChild(video);
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
